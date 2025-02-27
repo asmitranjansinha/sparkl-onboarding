@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sprkl_onboarding/core/config/app_theme.dart';
 import 'package:sprkl_onboarding/views/onboarding_view.dart';
 
 void main() {
@@ -12,10 +13,8 @@ class SparklOnboarding extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sparkl Onboarding',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.appTheme,
       home: const OnboardingView(),
     );
   }
