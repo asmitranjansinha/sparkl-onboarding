@@ -15,13 +15,18 @@ extension ContextExtensions on BuildContext {
 // Extension for responsive size calculations on num
 extension SizeExtensions on num {
   // Height percentage (h) calculation based on screen height
-  double h(BuildContext context) => this * context.screenHeight / 100;
+  double h(BuildContext context, {double scaleFactor = 1.0}) {
+    return (this * context.screenHeight / 100) * scaleFactor;
+  }
 
   // Width percentage (w) calculation based on screen width
   double w(BuildContext context) => this * context.screenWidth / 100;
 
   // For scalable text with an optional scaling factor for better control
   double sp(BuildContext context, {double scaleFactor = 1.0}) {
+    if (Platform.isAndroid) {
+      scaleFactor = 1.6;
+    }
     double baseSize = this * context.textScaleFactor;
     return baseSize *
         scaleFactor; // Adjust scaling factor for cross-platform consistency
@@ -29,7 +34,7 @@ extension SizeExtensions on num {
 
   double px(BuildContext context, {double scaleFactor = 1.0}) {
     if (Platform.isAndroid) {
-      scaleFactor = 1.4;
+      scaleFactor = 1.6;
     }
     double baseSize = this * context.textScaleFactor;
     return baseSize *
@@ -44,7 +49,7 @@ double platformAdjustedFontSize(BuildContext context, num size) {
     return size.sp(context, scaleFactor: 1.0); // No major adjustment for web
   } else if (Platform.isAndroid) {
     return size.sp(context,
-        scaleFactor: 1.4); // Adjust scale factor for Android
+        scaleFactor: 1.6); // Adjust scale factor for Android
   } else if (Platform.isIOS) {
     return size.sp(context); // Default scaling for iOS
   } else {
@@ -57,7 +62,7 @@ extension Dimensions on int {
     if (kIsWeb) {
       return 1.0; // No scaling adjustment for web
     } else if (Platform.isAndroid) {
-      return 1.4; // 1.5x scaling for Android
+      return 2; // 1.5x scaling for Android
     } else if (Platform.isIOS) {
       return 1.0; // No scaling adjustment for iOS
     } else {

@@ -114,139 +114,134 @@ class _OnboardingViewState extends State<OnboardingView>
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 5.w(context),
+              vertical: 2.h(context),
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  AnimatedBuilder(
-                    animation: _logoAnimation,
-                    builder: (context, child) {
-                      return Transform.translate(
-                        offset: Offset(
-                          -98.w(context) * (1 - _logoAnimation.value),
-                          -8.h(context) * (1 - _logoAnimation.value),
+            child: Column(
+              children: <Widget>[
+                AnimatedBuilder(
+                  animation: _logoAnimation,
+                  builder: (context, child) {
+                    return Transform.translate(
+                      offset: Offset(
+                        -98.w(context) * (1 - _logoAnimation.value),
+                        -8.h(context) * (1 - _logoAnimation.value),
+                      ),
+                      child: Transform.scale(
+                        scale: _logoAnimation.value, // Scale down the logo
+                        child: Image.asset(
+                          AppAssets.sparklLogo,
+                          width: 50.w(context),
                         ),
-                        child: Transform.scale(
-                          scale: _logoAnimation.value, // Scale down the logo
-                          child: Image.asset(
-                            AppAssets.sparklLogo,
-                            width: 50.w(context),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  20.verticalSpace,
-                  // Slide in text when view is 2
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 500),
-                    child: onboardingController.onBoardingView == 2
-                        ? SlideTransition(
-                            key: const ValueKey('slideText'),
-                            position: _slideAnimation,
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "1-on-1 Live Classes",
-                                    textAlign: TextAlign.center,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineLarge,
-                                  ),
-                                  5.verticalSpace,
-                                  Text(
-                                    "Learning customized for every student",
-                                    textAlign: TextAlign.center,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(
-                                          fontSize: 15.sp(context),
-                                        ),
-                                  ),
-                                  50.verticalSpace,
-                                ],
-                              ),
+                      ),
+                    );
+                  },
+                ),
+                20.verticalSpace,
+                // Slide in text when view is 2
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 500),
+                  child: onboardingController.onBoardingView == 2
+                      ? SlideTransition(
+                          key: const ValueKey('slideText'),
+                          position: _slideAnimation,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "1-on-1 Live Classes",
+                                  textAlign: TextAlign.center,
+                                  style:
+                                      Theme.of(context).textTheme.headlineLarge,
+                                ),
+                                5.verticalSpace,
+                                Text(
+                                  "Learning customized for every student",
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                        fontSize: 15.sp(context),
+                                      ),
+                                ),
+                                50.verticalSpace,
+                              ],
                             ),
-                          )
-                        : SizedBox.shrink(),
-                  ),
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 500),
-                    child: onboardingController.onBoardingView == 1
-                        ? AnimatedBuilder(
-                            animation: _textAnimation,
-                            builder: (context, child) {
-                              return Opacity(
-                                opacity: _textAnimation.value,
-                                child: Transform.translate(
-                                  offset: Offset(
-                                      100 * (1 - _textAnimation.value), 0),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        "Learning Made\nPersonal",
-                                        textAlign: TextAlign.center,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineLarge,
-                                      ),
-                                      5.verticalSpace,
-                                      Text(
-                                        "A Program designed just for YOU!",
-                                        textAlign: TextAlign.center,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .copyWith(
-                                              fontSize: 15.sp(context),
-                                            ),
-                                      ),
-                                    ],
-                                  ),
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                ),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 500),
+                  child: onboardingController.onBoardingView == 1
+                      ? AnimatedBuilder(
+                          animation: _textAnimation,
+                          builder: (context, child) {
+                            return Opacity(
+                              opacity: _textAnimation.value,
+                              child: Transform.translate(
+                                offset:
+                                    Offset(100 * (1 - _textAnimation.value), 0),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "Learning Made\nPersonal",
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge,
+                                    ),
+                                    5.verticalSpace,
+                                    Text(
+                                      "A Program designed just for YOU!",
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                            fontSize: 15.sp(context),
+                                          ),
+                                    ),
+                                  ],
                                 ),
-                              );
-                            },
-                          )
-                        : SizedBox.shrink(),
-                  ),
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 500),
-                    child: onboardingController.onBoardingView == 2
-                        ? AnimatedBuilder(
-                            key: const ValueKey('secondVideo'), // Unique key
-                            animation: _secondVideoAnimation,
-                            builder: (context, child) {
-                              return Transform.translate(
-                                offset: Offset(
-                                    0,
-                                    200.h(context) *
-                                        _secondVideoAnimation.value),
-                                child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.circular(20.sp(context)),
-                                  child: SizedBox(
-                                    width: 30.w(context),
-                                    height: 10.h(context),
-                                    child: _secondVideoController
-                                            .value.isInitialized
-                                        ? VideoPlayer(_secondVideoController)
-                                        : SizedBox.shrink(),
-                                  ),
+                              ),
+                            );
+                          },
+                        )
+                      : SizedBox.shrink(),
+                ),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 500),
+                  child: onboardingController.onBoardingView == 2
+                      ? AnimatedBuilder(
+                          key: const ValueKey('secondVideo'), // Unique key
+                          animation: _secondVideoAnimation,
+                          builder: (context, child) {
+                            return Transform.translate(
+                              offset: Offset(0,
+                                  200.h(context) * _secondVideoAnimation.value),
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(20.sp(context)),
+                                child: SizedBox(
+                                  width: 30.w(context),
+                                  height: 10.h(context),
+                                  child:
+                                      _secondVideoController.value.isInitialized
+                                          ? VideoPlayer(_secondVideoController)
+                                          : SizedBox.shrink(),
                                 ),
-                              );
-                            },
-                          )
-                        : SizedBox.shrink(), // Empty widget when not visible
-                  ),
-                  if (onboardingController.onBoardingView == 2)
-                    30.verticalSpace,
-                  centerStack(context),
-                ],
-              ),
+                              ),
+                            );
+                          },
+                        )
+                      : SizedBox.shrink(), // Empty widget when not visible
+                ),
+                if (onboardingController.onBoardingView == 2) 30.verticalSpace,
+                centerStack(context),
+              ],
             ),
           ),
         ),
