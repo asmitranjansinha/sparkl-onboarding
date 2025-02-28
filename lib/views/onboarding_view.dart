@@ -63,7 +63,6 @@ class _OnboardingViewState extends State<OnboardingView> {
                         fontSize: 15.sp(context),
                       ),
                 ),
-                30.verticalSpace,
                 centerStack(context),
               ],
             ),
@@ -87,13 +86,17 @@ class _OnboardingViewState extends State<OnboardingView> {
       clipBehavior: Clip.none,
       alignment: Alignment.center,
       children: [
-        Lottie.asset(AppAssets.sparklShapeShiftLottie),
+        Lottie.asset(
+          AppAssets.sparklShapeShiftLottie,
+          width: 95.w(context),
+          fit: BoxFit.cover,
+        ),
         Stack(
           clipBehavior: Clip.none,
           children: [
             Container(
-              width: 45.w(context),
-              height: 25.h(context),
+              width: 65.w(context),
+              height: 65.w(context),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
@@ -122,12 +125,12 @@ class _OnboardingViewState extends State<OnboardingView> {
                 padding: EdgeInsets.all(6.sp(context)),
                 child: Image.asset(
                   AppAssets.blueBook,
-                  height: 4.h(context),
+                  height: 6.h(context),
                 ),
               ),
             ),
             Positioned(
-              top: 11.h(context),
+              top: 17.h(context),
               left: -5.w(context),
               child: DottedBorder(
                 borderType: BorderType.Circle,
@@ -142,14 +145,14 @@ class _OnboardingViewState extends State<OnboardingView> {
                   padding: EdgeInsets.all(8.sp(context)),
                   child: Image.asset(
                     AppAssets.preReadSelected,
-                    height: 3.h(context),
+                    height: 4.h(context),
                   ),
                 ),
               ),
             ),
             Positioned(
-              top: 20.h(context),
-              left: -10.w(context),
+              top: 30.h(context),
+              left: -6.w(context),
               child: DottedBorder(
                 borderType: BorderType.RRect,
                 radius: Radius.circular(60.sp(context)),
@@ -169,7 +172,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                   child: Text(
                     "Doubt Clarification",
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontSize: 10.sp(context),
+                          fontSize: 12.sp(context),
                           fontFamily: GoogleFonts.indieFlower().fontFamily,
                           fontWeight: FontWeight.bold,
                         ),
@@ -199,7 +202,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                   child: Text(
                     "Holistic Well-Being",
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontSize: 10.sp(context),
+                          fontSize: 12.sp(context),
                           fontFamily: GoogleFonts.indieFlower().fontFamily,
                           fontWeight: FontWeight.bold,
                         ),
@@ -208,7 +211,7 @@ class _OnboardingViewState extends State<OnboardingView> {
               ),
             ),
             Positioned(
-              top: 15.h(context),
+              top: 25.h(context),
               right: -10.w(context),
               child: DottedBorder(
                 borderType: BorderType.RRect,
@@ -229,7 +232,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                   child: Text(
                     "Personalised",
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontSize: 10.sp(context),
+                          fontSize: 12.sp(context),
                           fontFamily: GoogleFonts.indieFlower().fontFamily,
                           fontWeight: FontWeight.bold,
                         ),
@@ -238,7 +241,7 @@ class _OnboardingViewState extends State<OnboardingView> {
               ),
             ),
             Positioned(
-              top: 28.h(context),
+              top: 38.h(context),
               right: -0.1.w(context),
               child: DottedBorder(
                 borderType: BorderType.Circle,
@@ -253,7 +256,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                   padding: EdgeInsets.all(8.sp(context)),
                   child: Image.asset(
                     AppAssets.emoji,
-                    height: 3.h(context),
+                    height: 4.h(context),
                   ),
                 ),
               ),
