@@ -14,7 +14,7 @@ class SparklOnboarding extends StatelessWidget {
     return MaterialApp(
       title: 'Sparkl Onboarding',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.appTheme,
+      theme: AppTheme().appTheme(context),
       home: const OnboardingView(),
     );
   }
