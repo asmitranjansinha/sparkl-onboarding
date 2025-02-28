@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sprkl_onboarding/controllers/onboarding_controller.dart';
 import 'package:sprkl_onboarding/core/config/app_theme.dart';
 import 'package:sprkl_onboarding/views/onboarding_view.dart';
 
 void main() {
-  runApp(const SparklOnboarding());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => OnboardingController()),
+      ],
+      child: const SparklOnboarding(),
+    ),
+  );
 }
 
 class SparklOnboarding extends StatelessWidget {
