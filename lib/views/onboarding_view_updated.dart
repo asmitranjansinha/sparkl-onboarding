@@ -63,8 +63,8 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                   AnimatedSwitcher(
                     duration: 500.ms,
                     child: onboardingController.onBoardingView == 1
-                        ? _buildView1(context)
-                        : _buildView2(context),
+                        ? _buildView1(context, onboardingController)
+                        : _buildView2(context, onboardingController),
                   ),
                 ],
               ),
@@ -81,6 +81,12 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                       padding: EdgeInsets.only(right: 20.sp(context)),
                       child: InkWell(
                         onTap: () {
+                          if (onboardingController.onBoardingView == 2) {
+                            onboardingController.isGoingFromView2toView1 = true;
+                          } else {
+                            onboardingController.isGoingFromView2toView1 =
+                                false;
+                          }
                           onboardingController.onBoardingView = 1;
                         },
                         child: Icon(Icons.arrow_back),
@@ -106,63 +112,72 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
     });
   }
 
-  Widget _buildView1(BuildContext context) {
+  Widget _buildView1(
+      BuildContext context, OnboardingController onboardingController) {
     return Column(
       children: [
-        Image.asset(
-          AppAssets.sparklLogo,
-          width: 50.w(context),
-        )
-            .animate()
-            .slideX(
-              begin: -1.0,
-              end: 0.0,
-              duration: 500.ms,
-            )
-            .scale(
-              begin: Offset(0.5, 0.5),
-              end: Offset(1.0, 1.0),
-              duration: 500.ms,
-            ),
+        // Image.asset(
+        //   AppAssets.sparklLogo,
+        //   width: 50.w(context),
+        // )
+        //     .animate()
+        //     .slideX(
+        //       begin: -1.0,
+        //       end: 0.0,
+        //       duration: 500.ms,
+        //     )
+        //     .scale(
+        //       begin: Offset(0.5, 0.5),
+        //       end: Offset(1.0, 1.0),
+        //       duration: 500.ms,
+        //     ),
+        _logo(context, onboardingController),
         20.verticalSpace,
-        Column(
+        Stack(
+          alignment: Alignment.center,
           children: [
-            // Text bounces from right to left and then centers
-            Text(
-              "Learning Made\nPersonal",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.headlineLarge,
-            )
-                .animate()
-                .slideX(
-                    begin: -1.0,
-                    end: 0.0,
-                    duration: 800.ms,
-                    curve: Curves.bounceOut)
-                .fadeIn(duration: 800.ms),
-            5.verticalSpace,
-            Text(
-              "A Program designed just for YOU!",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontSize: 15.sp(context),
-                  ),
-            )
-                .animate()
-                .slideX(
-                    begin: 1.0,
-                    end: 0.0,
-                    duration: 800.ms,
-                    curve: Curves.bounceOut)
-                .fadeIn(duration: 800.ms),
+            Column(
+              children: [
+                // Text bounces from right to left and then centers
+                Text(
+                  "Learning Made\nPersonal",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headlineLarge,
+                )
+                    .animate()
+                    .slideX(
+                        begin: -1.0,
+                        end: 0.0,
+                        duration: 800.ms,
+                        curve: Curves.bounceOut)
+                    .fadeIn(duration: 800.ms),
+                5.verticalSpace,
+                Text(
+                  "A Program designed just for YOU!",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontSize: 15.sp(context),
+                      ),
+                )
+                    .animate()
+                    .slideX(
+                        begin: 1.0,
+                        end: 0.0,
+                        duration: 800.ms,
+                        curve: Curves.bounceOut)
+                    .fadeIn(duration: 800.ms),
+              ],
+            ),
+            _teacherVideo(context, onboardingController),
           ],
         ),
-        _buildCenterStack(context),
+        _buildCenterStack(context, onboardingController),
       ],
     );
   }
 
-  Widget _buildView2(BuildContext context) {
+  Widget _buildView2(
+      BuildContext context, OnboardingController onboardingController) {
     return Column(
       children: [
         Align(
@@ -170,25 +185,26 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Align(
-                alignment: Alignment.center, // Start from the center
-                child: Image.asset(
-                  AppAssets.sparklLogo,
-                  width: 25.w(context),
-                )
-                    .animate()
-                    .slideX(
-                      begin: 0.0,
-                      end: -1.3,
-                      duration: 800.ms,
-                      curve: Curves.bounceOut,
-                    )
-                    .scale(
-                      begin: Offset(2.0, 2.0),
-                      end: Offset(1.0, 1.0),
-                      duration: 800.ms,
-                    ),
-              ),
+              // Align(
+              //   alignment: Alignment.center, // Start from the center
+              //   child: Image.asset(
+              //     AppAssets.sparklLogo,
+              //     width: 25.w(context),
+              //   )
+              //       .animate()
+              //       .slideX(
+              //         begin: 0.0,
+              //         end: -1.3,
+              //         duration: 800.ms,
+              //         curve: Curves.bounceOut,
+              //       )
+              //       .scale(
+              //         begin: Offset(2.0, 2.0),
+              //         end: Offset(1.0, 1.0),
+              //         duration: 800.ms,
+              //       ),
+              // ),
+              _logo(context, onboardingController),
               20.verticalSpace,
               Text(
                 "1-on-1 Live Classes",
@@ -213,33 +229,15 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
           ),
         ),
         20.verticalSpace,
-        Container(
-          width: 40.w(context),
-          height: 25.w(context),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0.sp(context)),
-          ),
-          padding: EdgeInsets.all(8.sp(context)),
-          child: _videoController.value.isInitialized
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0.sp(context)),
-                  child: VideoPlayer(_secondVideoController),
-                ).animate().slideY(
-                    begin: -3.0,
-                    end: 0.0,
-                    duration: 600.ms,
-                    curve: Curves.easeOut,
-                  )
-              : SizedBox.shrink(),
-        ),
+        _teacherVideo(context, onboardingController),
         30.verticalSpace,
-        _buildCenterStack(context),
+        _buildCenterStack(context, onboardingController),
       ],
     );
   }
 
-  Widget _buildCenterStack(BuildContext context) {
-    final onBoardController = context.watch<OnboardingController>();
+  Widget _buildCenterStack(
+      BuildContext context, OnboardingController onBoardController) {
     return Stack(
       clipBehavior: Clip.none,
       alignment: Alignment.center,
@@ -508,6 +506,97 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
           ],
         ),
       ],
+    );
+  }
+
+  Widget _logo(BuildContext context, OnboardingController controller) {
+    return AnimatedSwitcher(
+      duration: 800.ms,
+      child: controller.onBoardingView == 2
+          ? Align(
+              alignment: Alignment.center,
+              child: Image.asset(
+                AppAssets.sparklLogo,
+                width: 25.w(context),
+              )
+                  .animate()
+                  .slideX(
+                    begin: 0.0,
+                    end: -1.3,
+                    duration: 800.ms,
+                    curve: Curves.bounceOut,
+                  )
+                  .scale(
+                    begin: Offset(2.0, 2.0),
+                    end: Offset(1.0, 1.0),
+                    duration: 800.ms,
+                  ),
+            )
+          : Align(
+              alignment: Alignment.center,
+              child: Image.asset(
+                AppAssets.sparklLogo,
+                width: 50.w(context),
+              )
+                  .animate()
+                  .slideX(
+                    begin: -1.0,
+                    end: 0.0,
+                    duration: 500.ms,
+                  )
+                  .scale(
+                    begin: Offset(0.5, 0.5),
+                    end: Offset(1.0, 1.0),
+                    duration: 500.ms,
+                  ),
+            ),
+    );
+  }
+
+  Widget _teacherVideo(BuildContext context, OnboardingController controller) {
+    return AnimatedSwitcher(
+      duration: 800.ms,
+      child: controller.onBoardingView == 2
+          ? Container(
+              width: 40.w(context),
+              height: 25.w(context),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0.sp(context)),
+              ),
+              padding: EdgeInsets.all(8.sp(context)),
+              child: _videoController.value.isInitialized
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0.sp(context)),
+                      child: VideoPlayer(_secondVideoController),
+                    ).animate().slideY(
+                        begin: -3.0,
+                        end: 0.0,
+                        duration: 600.ms,
+                        curve: Curves.easeOut,
+                      )
+                  : SizedBox.shrink(),
+            )
+          : controller.isGoingFromView2toView1
+              ? Container(
+                  width: 40.w(context),
+                  height: 25.w(context),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0.sp(context)),
+                  ),
+                  padding: EdgeInsets.all(8.sp(context)),
+                  child: _videoController.value.isInitialized
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0.sp(context)),
+                          child: VideoPlayer(_secondVideoController),
+                        ).animate().slideY(
+                            begin: 0.0,
+                            end: -3.0,
+                            duration: 600.ms,
+                            curve: Curves.easeOut,
+                          )
+                      : SizedBox.shrink(),
+                )
+              : SizedBox.shrink(),
     );
   }
 
