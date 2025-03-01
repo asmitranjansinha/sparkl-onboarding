@@ -518,7 +518,8 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
   Widget _teacherVideo(BuildContext context, OnboardingController controller) {
     return AnimatedSwitcher(
       duration: 800.ms,
-      child: controller.onBoardingView == 2
+      child: (controller.isGoingFromView3toView2 &&
+              controller.onBoardingView == 2)
           ? Container(
               width: 40.w(context),
               height: 25.w(context),
@@ -530,17 +531,25 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(10.0.sp(context)),
                       child: VideoPlayer(_secondVideoController),
-                    ).animate().slideY(
-                        begin: -3.0,
+                    )
+                      .animate()
+                      .slideX(
+                        begin: -2.0,
                         end: 0.0,
-                        duration: 600.ms,
+                        duration: 900.ms,
+                        curve: Curves.easeOut,
+                      )
+                      .scale(
+                        begin: Offset(0.5, 0.5),
+                        end: Offset(1.0, 1.0),
+                        duration: 900.ms,
                         curve: Curves.easeOut,
                       )
                   : SizedBox.shrink(),
             )
-          : controller.onBoardingView == 3
+          : controller.onBoardingView == 2
               ? Container(
-                  width: 25.w(context),
+                  width: 40.w(context),
                   height: 25.w(context),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0.sp(context)),
@@ -548,21 +557,12 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                   padding: EdgeInsets.all(8.sp(context)),
                   child: _videoController.value.isInitialized
                       ? ClipRRect(
-                          borderRadius:
-                              BorderRadius.circular(160.0.sp(context)),
+                          borderRadius: BorderRadius.circular(10.0.sp(context)),
                           child: VideoPlayer(_secondVideoController),
-                        )
-                          .animate()
-                          .slideX(
-                            begin: 0.0,
-                            end: -3.8,
-                            duration: 900.ms,
-                            curve: Curves.easeOut,
-                          )
-                          .scale(
-                            begin: Offset(1.0, 1.0),
-                            end: Offset(0.5, 0.5),
-                            duration: 900.ms,
+                        ).animate().slideY(
+                            begin: -3.0,
+                            end: 0.0,
+                            duration: 600.ms,
                             curve: Curves.easeOut,
                           )
                       : SizedBox.shrink(),
@@ -588,7 +588,69 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                               )
                           : SizedBox.shrink(),
                     )
-                  : SizedBox.shrink(),
+                  : controller.onBoardingView == 3
+                      ? Container(
+                          width: 25.w(context),
+                          height: 25.w(context),
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(10.0.sp(context)),
+                          ),
+                          padding: EdgeInsets.all(8.sp(context)),
+                          child: _videoController.value.isInitialized
+                              ? ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.circular(160.0.sp(context)),
+                                  child: VideoPlayer(_secondVideoController),
+                                )
+                                  .animate()
+                                  .slideX(
+                                    begin: 0.0,
+                                    end: -3.8,
+                                    duration: 900.ms,
+                                    curve: Curves.easeOut,
+                                  )
+                                  .scale(
+                                    begin: Offset(1.0, 1.0),
+                                    end: Offset(0.5, 0.5),
+                                    duration: 900.ms,
+                                    curve: Curves.easeOut,
+                                  )
+                              : SizedBox.shrink(),
+                        )
+                      : (controller.onBoardingView == 2 &&
+                              controller.isGoingFromView3toView2)
+                          ? Container(
+                              width: 40.w(context),
+                              height: 25.w(context),
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.circular(10.0.sp(context)),
+                              ),
+                              padding: EdgeInsets.all(8.sp(context)),
+                              child: _videoController.value.isInitialized
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          10.0.sp(context)),
+                                      child:
+                                          VideoPlayer(_secondVideoController),
+                                    )
+                                      .animate()
+                                      .slideX(
+                                        begin: -3.8,
+                                        end: 0.0,
+                                        duration: 900.ms,
+                                        curve: Curves.easeOut,
+                                      )
+                                      .scale(
+                                        begin: Offset(1.0, 1.0),
+                                        end: Offset(2.0, 2.0),
+                                        duration: 900.ms,
+                                        curve: Curves.easeOut,
+                                      )
+                                  : SizedBox.shrink(),
+                            )
+                          : SizedBox.shrink(),
     );
   }
 }
