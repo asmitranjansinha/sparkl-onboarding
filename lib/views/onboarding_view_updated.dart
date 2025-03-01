@@ -8,6 +8,8 @@ import 'package:sprkl_onboarding/controllers/onboarding_controller.dart';
 import 'package:sprkl_onboarding/core/config/app_assets.dart';
 import 'package:sprkl_onboarding/core/config/app_colors.dart';
 import 'package:sprkl_onboarding/core/utils/sizer.dart';
+import 'package:sprkl_onboarding/views/widgets/logo.dart';
+import 'package:sprkl_onboarding/views/widgets/stack_card.dart';
 import 'package:video_player/video_player.dart';
 
 class OnboardingViewUpdated extends StatefulWidget {
@@ -116,22 +118,7 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
       BuildContext context, OnboardingController onboardingController) {
     return Column(
       children: [
-        // Image.asset(
-        //   AppAssets.sparklLogo,
-        //   width: 50.w(context),
-        // )
-        //     .animate()
-        //     .slideX(
-        //       begin: -1.0,
-        //       end: 0.0,
-        //       duration: 500.ms,
-        //     )
-        //     .scale(
-        //       begin: Offset(0.5, 0.5),
-        //       end: Offset(1.0, 1.0),
-        //       duration: 500.ms,
-        //     ),
-        _logo(context, onboardingController),
+        logo(context, onboardingController),
         20.verticalSpace,
         Stack(
           alignment: Alignment.center,
@@ -185,26 +172,7 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Align(
-              //   alignment: Alignment.center, // Start from the center
-              //   child: Image.asset(
-              //     AppAssets.sparklLogo,
-              //     width: 25.w(context),
-              //   )
-              //       .animate()
-              //       .slideX(
-              //         begin: 0.0,
-              //         end: -1.3,
-              //         duration: 800.ms,
-              //         curve: Curves.bounceOut,
-              //       )
-              //       .scale(
-              //         begin: Offset(2.0, 2.0),
-              //         end: Offset(1.0, 1.0),
-              //         duration: 800.ms,
-              //       ),
-              // ),
-              _logo(context, onboardingController),
+              logo(context, onboardingController),
               20.verticalSpace,
               Text(
                 "1-on-1 Live Classes",
@@ -252,7 +220,7 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
               ),
         // Stack card (only for view 2)
         onBoardController.onBoardingView == 2
-            ? _buildStackCard()
+            ? buildStackCard(context)
             : SizedBox.shrink(),
         Stack(
           clipBehavior: Clip.none,
@@ -509,50 +477,6 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
     );
   }
 
-  Widget _logo(BuildContext context, OnboardingController controller) {
-    return AnimatedSwitcher(
-      duration: 800.ms,
-      child: controller.onBoardingView == 2
-          ? Align(
-              alignment: Alignment.center,
-              child: Image.asset(
-                AppAssets.sparklLogo,
-                width: 25.w(context),
-              )
-                  .animate()
-                  .slideX(
-                    begin: 0.0,
-                    end: -1.3,
-                    duration: 800.ms,
-                    curve: Curves.bounceOut,
-                  )
-                  .scale(
-                    begin: Offset(2.0, 2.0),
-                    end: Offset(1.0, 1.0),
-                    duration: 800.ms,
-                  ),
-            )
-          : Align(
-              alignment: Alignment.center,
-              child: Image.asset(
-                AppAssets.sparklLogo,
-                width: 50.w(context),
-              )
-                  .animate()
-                  .slideX(
-                    begin: -1.0,
-                    end: 0.0,
-                    duration: 500.ms,
-                  )
-                  .scale(
-                    begin: Offset(0.5, 0.5),
-                    end: Offset(1.0, 1.0),
-                    duration: 500.ms,
-                  ),
-            ),
-    );
-  }
-
   Widget _teacherVideo(BuildContext context, OnboardingController controller) {
     return AnimatedSwitcher(
       duration: 800.ms,
@@ -597,60 +521,6 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                       : SizedBox.shrink(),
                 )
               : SizedBox.shrink(),
-    );
-  }
-
-  Widget _buildStackCard() {
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.center,
-      children: [
-        Positioned(
-          bottom: 18.h(context),
-          child: Image.asset(
-            AppAssets.stackCard,
-            width: 58.w(context),
-          ).animate().slideX(
-                begin: 1.0,
-                end: 0.0,
-                duration: 900.ms,
-                curve: Curves.bounceOut,
-              ),
-        ),
-        Positioned(
-          bottom: 12.h(context),
-          child: Image.asset(
-            AppAssets.stackCard,
-            width: 70.w(context),
-          ).animate().slideX(
-                begin: 1.0,
-                end: 0.0,
-                duration: 900.ms,
-                curve: Curves.bounceOut,
-              ),
-        ),
-        Positioned(
-          bottom: 6.h(context),
-          child: Image.asset(
-            AppAssets.stackCard,
-            width: 80.w(context),
-          ).animate().slideX(
-                begin: 1.0,
-                end: 0.0,
-                duration: 900.ms,
-                curve: Curves.bounceOut,
-              ),
-        ),
-        Image.asset(
-          AppAssets.stackCard,
-          width: 100.w(context),
-        ).animate().slideX(
-              begin: 1.0,
-              end: 0.0,
-              duration: 900.ms,
-              curve: Curves.bounceOut,
-            ),
-      ],
     );
   }
 }
