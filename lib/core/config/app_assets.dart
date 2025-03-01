@@ -10,7 +10,7 @@ class AppAssets {
   /// Videos
   static const _video = "assets/videos";
   static const String studentVideo = "$_video/studentvideo.mp4";
-  static const String teachervideo = "$_video/teachervideo.mp4";
+  static const String teacherVideo = "$_video/teachervideo.mp4";
 
   /// Lottie
   static const _lottie = "assets/lotties";

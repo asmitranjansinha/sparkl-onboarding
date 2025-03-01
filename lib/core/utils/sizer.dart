@@ -25,7 +25,7 @@ extension SizeExtensions on num {
   // For scalable text with an optional scaling factor for better control
   double sp(BuildContext context, {double scaleFactor = 1.0}) {
     if (Platform.isAndroid) {
-      scaleFactor = 1.6;
+      scaleFactor = 1.4;
     }
     double baseSize = this * context.textScaleFactor;
     return baseSize *
@@ -34,7 +34,7 @@ extension SizeExtensions on num {
 
   double px(BuildContext context, {double scaleFactor = 1.0}) {
     if (Platform.isAndroid) {
-      scaleFactor = 1.6;
+      scaleFactor = 1.4;
     }
     double baseSize = this * context.textScaleFactor;
     return baseSize *
@@ -49,7 +49,7 @@ double platformAdjustedFontSize(BuildContext context, num size) {
     return size.sp(context, scaleFactor: 1.0); // No major adjustment for web
   } else if (Platform.isAndroid) {
     return size.sp(context,
-        scaleFactor: 1.6); // Adjust scale factor for Android
+        scaleFactor: 1.4); // Adjust scale factor for Android
   } else if (Platform.isIOS) {
     return size.sp(context); // Default scaling for iOS
   } else {

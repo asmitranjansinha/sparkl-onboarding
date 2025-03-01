@@ -38,7 +38,7 @@ class _OnboardingViewState extends State<OnboardingView>
         _videoController.play();
       });
 
-    _secondVideoController = VideoPlayerController.asset(AppAssets.teachervideo)
+    _secondVideoController = VideoPlayerController.asset(AppAssets.teacherVideo)
       ..setLooping(true)
       ..initialize().then((_) {
         setState(() {});

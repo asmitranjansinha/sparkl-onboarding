@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sprkl_onboarding/controllers/onboarding_controller.dart';
 import 'package:sprkl_onboarding/core/config/app_theme.dart';
 import 'package:sprkl_onboarding/views/onboarding_view.dart';
+import 'package:sprkl_onboarding/views/onboarding_view_updated.dart';
 
 void main() {
   runApp(
@@ -24,7 +25,7 @@ class SparklOnboarding extends StatelessWidget {
       title: 'Sparkl Onboarding',
       debugShowCheckedModeBanner: false,
       theme: AppTheme().appTheme(context),
-      home: const OnboardingView(),
+      home: const OnboardingViewUpdated(),
     );
   }
 }
