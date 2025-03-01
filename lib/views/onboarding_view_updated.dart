@@ -66,7 +66,9 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                     duration: 500.ms,
                     child: onboardingController.onBoardingView == 1
                         ? _buildView1(context, onboardingController)
-                        : _buildView2(context, onboardingController),
+                        : onboardingController.onBoardingView == 2
+                            ? _buildView2(context, onboardingController)
+                            : _buildView3(context, onboardingController),
                   ),
                 ],
               ),
@@ -85,11 +87,15 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                         onTap: () {
                           if (onboardingController.onBoardingView == 2) {
                             onboardingController.isGoingFromView2toView1 = true;
-                          } else {
+                            onboardingController.isGoingFromView3toView2 =
+                                false;
+                            onboardingController.onBoardingView = 1;
+                          } else if (onboardingController.onBoardingView == 3) {
+                            onboardingController.isGoingFromView3toView2 = true;
                             onboardingController.isGoingFromView2toView1 =
                                 false;
+                            onboardingController.onBoardingView = 2;
                           }
-                          onboardingController.onBoardingView = 1;
                         },
                         child: Icon(Icons.arrow_back),
                       ),
@@ -97,7 +103,11 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    onboardingController.onBoardingView = 2;
+                    if (onboardingController.onBoardingView == 1) {
+                      onboardingController.onBoardingView = 2;
+                    } else if (onboardingController.onBoardingView == 2) {
+                      onboardingController.onBoardingView = 3;
+                    }
                   },
                   child: Text("Next"),
                 ),
@@ -200,6 +210,34 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
         _teacherVideo(context, onboardingController),
         30.verticalSpace,
         _buildCenterStack(context, onboardingController),
+      ],
+    );
+  }
+
+  Widget _buildView3(
+      BuildContext context, OnboardingController onboardingController) {
+    return Column(
+      children: [
+        logo(context, onboardingController),
+        20.verticalSpace,
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Doubt Resolution\nwith Teachers",
+                style: Theme.of(context).textTheme.headlineLarge,
+              ).animate().fadeIn(duration: 300.ms).slideX(
+                    begin: 1.0,
+                    end: 0.0,
+                    duration: 300.ms,
+                  ),
+            ],
+          ),
+        ),
+        20.verticalSpace,
+        _teacherVideo(context, onboardingController)
       ],
     );
   }
@@ -500,9 +538,9 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                       )
                   : SizedBox.shrink(),
             )
-          : controller.isGoingFromView2toView1
+          : controller.onBoardingView == 3
               ? Container(
-                  width: 40.w(context),
+                  width: 25.w(context),
                   height: 25.w(context),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0.sp(context)),
@@ -510,17 +548,47 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                   padding: EdgeInsets.all(8.sp(context)),
                   child: _videoController.value.isInitialized
                       ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0.sp(context)),
+                          borderRadius:
+                              BorderRadius.circular(160.0.sp(context)),
                           child: VideoPlayer(_secondVideoController),
-                        ).animate().slideY(
+                        )
+                          .animate()
+                          .slideX(
                             begin: 0.0,
-                            end: -3.0,
-                            duration: 600.ms,
+                            end: -3.8,
+                            duration: 900.ms,
+                            curve: Curves.easeOut,
+                          )
+                          .scale(
+                            begin: Offset(1.0, 1.0),
+                            end: Offset(0.5, 0.5),
+                            duration: 900.ms,
                             curve: Curves.easeOut,
                           )
                       : SizedBox.shrink(),
                 )
-              : SizedBox.shrink(),
+              : controller.isGoingFromView2toView1
+                  ? Container(
+                      width: 40.w(context),
+                      height: 25.w(context),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0.sp(context)),
+                      ),
+                      padding: EdgeInsets.all(8.sp(context)),
+                      child: _videoController.value.isInitialized
+                          ? ClipRRect(
+                              borderRadius:
+                                  BorderRadius.circular(10.0.sp(context)),
+                              child: VideoPlayer(_secondVideoController),
+                            ).animate().slideY(
+                                begin: 0.0,
+                                end: -3.0,
+                                duration: 600.ms,
+                                curve: Curves.easeOut,
+                              )
+                          : SizedBox.shrink(),
+                    )
+                  : SizedBox.shrink(),
     );
   }
 }

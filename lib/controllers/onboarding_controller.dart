@@ -16,4 +16,12 @@ class OnboardingController extends ChangeNotifier {
     _isGoingFromView2toView1 = value;
     notifyListeners();
   }
+
+  bool _isGoingFromView3toView2 = false;
+  bool get isGoingFromView3toView2 => _isGoingFromView3toView2;
+
+  set isGoingFromView3toView2(bool value) {
+    _isGoingFromView3toView2 = value;
+    notifyListeners();
+  }
 }
