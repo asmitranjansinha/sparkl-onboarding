@@ -1,4 +1,4 @@
-# sprkl_onboarding
+# Sprkl Onboarding
 
 ## Screenshots 📸
 
