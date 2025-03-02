@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
-
 class DashedCirclePainter extends CustomPainter {
   final Color dashColor;
   final double dashWidth;

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,9 @@ import 'package:sprkl_onboarding/views/widgets/dashed_circle_painter.dart';
 import 'package:video_player/video_player.dart';
 
 class OnboardingViewUpdated extends StatefulWidget {
-  const OnboardingViewUpdated({super.key});
+  final CameraController? cameraController;
+
+  const OnboardingViewUpdated({super.key, this.cameraController});
 
   @override
   State<OnboardingViewUpdated> createState() => _OnboardingViewUpdatedState();
@@ -443,11 +446,11 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                         ),
                       ),
                       padding: EdgeInsets.all(8.sp(context)),
-                      child: _videoController.value.isInitialized
+                      child: widget.cameraController != null
                           ? ClipRRect(
                               borderRadius:
                                   BorderRadius.circular(160.sp(context)),
-                              child: VideoPlayer(_videoController),
+                              child: CameraPreview(widget.cameraController!),
                             )
                               .animate()
                               .slideY(
@@ -460,7 +463,25 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                                 end: Offset(1.0, 1.0), // Scale up
                                 duration: 800.ms,
                               )
-                          : SizedBox.shrink(),
+                          : _videoController.value.isInitialized
+                              ? ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.circular(160.sp(context)),
+                                  child: VideoPlayer(_videoController),
+                                )
+                                  .animate()
+                                  .slideY(
+                                    begin: 1.2, // Start from bottom
+                                    end: 0.0, // Move to top
+                                    duration: 800.ms,
+                                  )
+                                  .scale(
+                                    begin:
+                                        Offset(0.4, 0.4), // Start scaled down
+                                    end: Offset(1.0, 1.0), // Scale up
+                                    duration: 800.ms,
+                                  )
+                              : SizedBox.shrink(),
                     )
                   : onBoardController.onBoardingView == 2
                       ? Container(
@@ -471,11 +492,12 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                             shape: BoxShape.circle,
                           ),
                           padding: EdgeInsets.all(8.sp(context)),
-                          child: _videoController.value.isInitialized
+                          child: widget.cameraController != null
                               ? ClipRRect(
                                   borderRadius:
                                       BorderRadius.circular(160.sp(context)),
-                                  child: VideoPlayer(_videoController),
+                                  child:
+                                      CameraPreview(widget.cameraController!),
                                 )
                                   .animate()
                                   .slideY(
@@ -489,7 +511,25 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                                     end: Offset(0.3, 0.3), // Scale down
                                     duration: 800.ms,
                                   )
-                              : SizedBox.shrink(),
+                              : _videoController.value.isInitialized
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          160.sp(context)),
+                                      child: VideoPlayer(_videoController),
+                                    )
+                                      .animate()
+                                      .slideY(
+                                        begin: 0.0, // Start from top
+                                        end: 1.5, // Move to bottom
+                                        duration: 800.ms,
+                                      )
+                                      .scale(
+                                        begin: Offset(
+                                            1.0, 1.0), // Start at full size
+                                        end: Offset(0.3, 0.3), // Scale down
+                                        duration: 800.ms,
+                                      )
+                                  : SizedBox.shrink(),
                         )
                       : onBoardController.onBoardingView == 3
                           ? Align(
@@ -502,11 +542,12 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                                   shape: BoxShape.circle,
                                 ),
                                 padding: EdgeInsets.all(8.sp(context)),
-                                child: _videoController.value.isInitialized
+                                child: widget.cameraController != null
                                     ? ClipRRect(
                                         borderRadius: BorderRadius.circular(
                                             160.sp(context)),
-                                        child: VideoPlayer(_videoController),
+                                        child: CameraPreview(
+                                            widget.cameraController!),
                                       )
                                         .animate()
                                         .slide(
@@ -520,7 +561,26 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                                           end: Offset(0.5, 0.5),
                                           duration: 800.ms,
                                         )
-                                    : SizedBox.shrink(),
+                                    : _videoController.value.isInitialized
+                                        ? ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                160.sp(context)),
+                                            child:
+                                                VideoPlayer(_videoController),
+                                          )
+                                            .animate()
+                                            .slide(
+                                              begin: Offset(-1.0, 1.5),
+                                              end: Offset(1.0, 0.0),
+                                              duration: 800.ms,
+                                              curve: Curves.linearToEaseOut,
+                                            )
+                                            .scale(
+                                              begin: Offset(2.0, 2.0),
+                                              end: Offset(0.5, 0.5),
+                                              duration: 800.ms,
+                                            )
+                                        : SizedBox.shrink(),
                               ),
                             )
                           : SizedBox.shrink(),
