@@ -1,3 +1,4 @@
+import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -95,6 +96,9 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                             onboardingController.isGoingFromView2toView1 =
                                 false;
                             onboardingController.onBoardingView = 2;
+                            onboardingController.is1stBubbleVisible = false;
+                            onboardingController.is2ndBubbleVisible = false;
+                            onboardingController.is3rdBubbleVisible = false;
                           }
                         },
                         child: Icon(Icons.arrow_back),
@@ -107,6 +111,11 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                       onboardingController.onBoardingView = 2;
                     } else if (onboardingController.onBoardingView == 2) {
                       onboardingController.onBoardingView = 3;
+                    } else if (onboardingController.onBoardingView == 3) {
+                      // Trigger the bubble animation after the video slides left
+                      Future.delayed(900.ms, () {
+                        onboardingController.is1stBubbleVisible = true;
+                      });
                     }
                   },
                   child: Text("Next"),
@@ -236,8 +245,145 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
             ],
           ),
         ),
-        20.verticalSpace,
-        _teacherVideo(context, onboardingController)
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // BubbleSpecialThree placed before _teacherVideo
+            Column(
+              children: [
+                50.verticalSpace,
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: AnimatedSwitcher(
+                    duration: 900.ms,
+                    child: onboardingController.is1stBubbleVisible
+                        ? BubbleSpecialThree(
+                            key: ValueKey<bool>(
+                                onboardingController.is1stBubbleVisible),
+                            text:
+                                "Do you want to go over\nhow to apply the\nquadratic formula?",
+                            isSender: false,
+                            color: AppColors.otherYellow,
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  fontSize: 15.sp(context),
+                                ),
+                          ).animate(onComplete: (animateController) {
+                            onboardingController.is2ndBubbleVisible = true;
+                          }).scale(
+                            begin: Offset(
+                                0.0, 0.0), // Start scaling from 0 (invisible)
+                            end: Offset(1.0, 1.0), // End scaling at full size
+                            duration: 900.ms,
+                            curve: Curves.easeOut,
+                            alignment: Alignment
+                                .topLeft, // Scale from the top-left corner
+                          )
+                        : SizedBox.shrink(),
+                  ),
+                ),
+              ],
+            ),
+            _teacherVideo(context, onboardingController),
+          ],
+        ),
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Column(
+              children: [
+                50.verticalSpace,
+                Align(
+                  alignment: Alignment.topRight,
+                  child: AnimatedSwitcher(
+                    duration: 900.ms,
+                    child: onboardingController.is2ndBubbleVisible
+                        ? BubbleSpecialThree(
+                            key: ValueKey<bool>(
+                                onboardingController.is2ndBubbleVisible),
+                            text: "Yes, I'm confused about when to use it.",
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  fontSize: 15.sp(context),
+                                ),
+                          ).animate(onComplete: (animateController) {
+                            onboardingController.is3rdBubbleVisible = true;
+                          }).scale(
+                            begin: Offset(0.0, 0.0),
+                            end: Offset(1.0, 1.0),
+                            duration: 900.ms,
+                            curve: Curves.easeOut,
+                            alignment: Alignment
+                                .topRight, // Scale from the top-left corner
+                          )
+                        : SizedBox.shrink(),
+                  ),
+                ),
+              ],
+            ),
+            _buildCenterStack(context, onboardingController),
+          ],
+        ),
+        30.verticalSpace,
+        if (onboardingController.is3rdBubbleVisible)
+          Stack(
+            children: [
+              Column(
+                children: [
+                  20.verticalSpace,
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: AnimatedSwitcher(
+                      duration: 900.ms,
+                      child: onboardingController.is1stBubbleVisible
+                          ? BubbleSpecialThree(
+                              key: ValueKey<bool>(
+                                  onboardingController.is1stBubbleVisible),
+                              text:
+                                  "You use it when the\nequation is in the form ax^2 +\nbx + c = 0, Let me show you\na quick example to clarify.",
+                              isSender: false,
+                              color: AppColors.otherYellow,
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    fontSize: 15.sp(context),
+                                  ),
+                            ).animate().scale(
+                                begin: Offset(0.0,
+                                    0.0), // Start scaling from 0 (invisible)
+                                end: Offset(
+                                    1.0, 1.0), // End scaling at full size
+                                duration: 900.ms,
+                                curve: Curves.easeOut,
+                                alignment: Alignment
+                                    .topLeft, // Scale from the top-left corner
+                              )
+                          : SizedBox.shrink(),
+                    ),
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  width: 10.w(context),
+                  height: 10.w(context),
+                  child: _videoController.value.isInitialized
+                      ? ClipRRect(
+                          borderRadius:
+                              BorderRadius.circular(160.0.sp(context)),
+                          child: VideoPlayer(_secondVideoController),
+                        )
+                      : SizedBox.shrink(),
+                ),
+              ),
+            ],
+          )
       ],
     );
   }
@@ -249,19 +395,20 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
       alignment: Alignment.center,
       children: [
         // Lottie animation (only for view 1)
-        onBoardController.onBoardingView == 2
-            ? SizedBox.shrink()
-            : Lottie.asset(
+        onBoardController.onBoardingView == 1
+            ? Lottie.asset(
                 AppAssets.sparklShapeShiftLottie,
                 width: 95.w(context),
                 fit: BoxFit.cover,
-              ),
+              )
+            : SizedBox.shrink(),
         // Stack card (only for view 2)
         onBoardController.onBoardingView == 2
             ? buildStackCard(context)
             : SizedBox.shrink(),
         Stack(
           clipBehavior: Clip.none,
+          alignment: Alignment.center,
           children: [
             // Video slides from bottom to the stack
             AnimatedSwitcher(
@@ -298,59 +445,98 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                               )
                           : SizedBox.shrink(),
                     )
-                  : Container(
-                      key: ValueKey(2), // Unique key for View 2
-                      width: 65.w(context),
-                      height: 65.w(context),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      padding: EdgeInsets.all(8.sp(context)),
-                      child: _videoController.value.isInitialized
-                          ? ClipRRect(
-                              borderRadius:
-                                  BorderRadius.circular(160.sp(context)),
-                              child: VideoPlayer(_videoController),
+                  : onBoardController.onBoardingView == 2
+                      ? Container(
+                          key: ValueKey(2), // Unique key for View 2
+                          width: 65.w(context),
+                          height: 65.w(context),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          padding: EdgeInsets.all(8.sp(context)),
+                          child: _videoController.value.isInitialized
+                              ? ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.circular(160.sp(context)),
+                                  child: VideoPlayer(_videoController),
+                                )
+                                  .animate()
+                                  .slideY(
+                                    begin: 0.0, // Start from top
+                                    end: 1.2, // Move to bottom
+                                    duration: 800.ms,
+                                  )
+                                  .scale(
+                                    begin:
+                                        Offset(1.0, 1.0), // Start at full size
+                                    end: Offset(0.4, 0.4), // Scale down
+                                    duration: 800.ms,
+                                  )
+                              : SizedBox.shrink(),
+                        )
+                      : onBoardController.onBoardingView == 3
+                          ? Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                key: ValueKey(3), // Unique key for View 3
+                                width: 25.w(context),
+                                height: 25.w(context),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                padding: EdgeInsets.all(8.sp(context)),
+                                child: _videoController.value.isInitialized
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            160.sp(context)),
+                                        child: VideoPlayer(_videoController),
+                                      )
+                                        .animate()
+                                        .slide(
+                                          begin: Offset(-1.0, 1.5),
+                                          end: Offset(1.0, 0.0),
+                                          duration: 800.ms,
+                                          curve: Curves.linearToEaseOut,
+                                        )
+                                        .scale(
+                                          begin: Offset(2.0, 2.0),
+                                          end: Offset(0.5, 0.5),
+                                          duration: 800.ms,
+                                        )
+                                    : SizedBox.shrink(),
+                              ),
                             )
-                              .animate()
-                              .slideY(
-                                begin: 0.0, // Start from top
-                                end: 1.2, // Move to bottom
-                                duration: 800.ms,
-                              )
-                              .scale(
-                                begin: Offset(1.0, 1.0), // Start at full size
-                                end: Offset(0.4, 0.4), // Scale down
-                                duration: 800.ms,
-                              )
                           : SizedBox.shrink(),
-                    ),
             ),
 
             // Emojis and books with dotted borders bounce from corners
-            if (onBoardController.onBoardingView != 2) ...[
+            if (onBoardController.onBoardingView == 1) ...[
               // Blue book (top-left corner)
-              DottedBorder(
-                borderType: BorderType.Circle,
-                color: AppColors.yellow,
-                strokeWidth: 2,
-                dashPattern: [4, 2],
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.glass,
-                    shape: BoxShape.circle,
+              Positioned(
+                top: -1.h(context),
+                left: 4.0.w(context),
+                child: DottedBorder(
+                  borderType: BorderType.Circle,
+                  color: AppColors.yellow,
+                  strokeWidth: 2,
+                  dashPattern: [4, 2],
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.glass,
+                      shape: BoxShape.circle,
+                    ),
+                    padding: EdgeInsets.all(6.sp(context)),
+                    child: Image.asset(
+                      AppAssets.blueBook,
+                      height: 6.h(context),
+                    ),
                   ),
-                  padding: EdgeInsets.all(6.sp(context)),
-                  child: Image.asset(
-                    AppAssets.blueBook,
-                    height: 6.h(context),
-                  ),
-                ),
-              ).animate().slide(
-                  begin: Offset(-1.0, -1.0),
-                  end: Offset.zero,
-                  duration: 800.ms,
-                  curve: Curves.bounceOut),
+                ).animate().slide(
+                    begin: Offset(-1.0, -1.0),
+                    end: Offset.zero,
+                    duration: 800.ms,
+                    curve: Curves.bounceOut),
+              ),
 
               Positioned(
                 top: 17.h(context),
@@ -521,6 +707,7 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
       child: (controller.isGoingFromView3toView2 &&
               controller.onBoardingView == 2)
           ? Container(
+              key: ValueKey<bool>(controller.isGoingFromView3toView2),
               width: 40.w(context),
               height: 25.w(context),
               decoration: BoxDecoration(
@@ -549,6 +736,7 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
             )
           : controller.onBoardingView == 2
               ? Container(
+                  key: ValueKey<int>(2),
                   width: 40.w(context),
                   height: 25.w(context),
                   decoration: BoxDecoration(
@@ -569,6 +757,7 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                 )
               : controller.isGoingFromView2toView1
                   ? Container(
+                      key: ValueKey<bool>(controller.isGoingFromView2toView1),
                       width: 40.w(context),
                       height: 25.w(context),
                       decoration: BoxDecoration(
@@ -590,6 +779,7 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                     )
                   : controller.onBoardingView == 3
                       ? Container(
+                          key: ValueKey<int>(3),
                           width: 25.w(context),
                           height: 25.w(context),
                           decoration: BoxDecoration(
@@ -603,10 +793,12 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                                       BorderRadius.circular(160.0.sp(context)),
                                   child: VideoPlayer(_secondVideoController),
                                 )
-                                  .animate()
+                                  .animate(onComplete: (animateController) {
+                                    controller.is1stBubbleVisible = true;
+                                  })
                                   .slideX(
-                                    begin: 0.0,
-                                    end: -3.8,
+                                    begin: 2.0,
+                                    end: -0.8,
                                     duration: 900.ms,
                                     curve: Curves.easeOut,
                                   )
@@ -621,6 +813,8 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                       : (controller.onBoardingView == 2 &&
                               controller.isGoingFromView3toView2)
                           ? Container(
+                              key: ValueKey<bool>(
+                                  controller.isGoingFromView3toView2),
                               width: 40.w(context),
                               height: 25.w(context),
                               decoration: BoxDecoration(

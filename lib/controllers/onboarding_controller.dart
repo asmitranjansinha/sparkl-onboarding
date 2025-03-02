@@ -24,4 +24,28 @@ class OnboardingController extends ChangeNotifier {
     _isGoingFromView3toView2 = value;
     notifyListeners();
   }
+
+  bool _is1stBubbleVisible = false;
+  bool get is1stBubbleVisible => _is1stBubbleVisible;
+
+  set is1stBubbleVisible(bool value) {
+    _is1stBubbleVisible = value;
+    notifyListeners();
+  }
+
+  bool _is2ndBubbleVisible = false;
+  bool get is2ndBubbleVisible => _is2ndBubbleVisible;
+
+  set is2ndBubbleVisible(bool value) {
+    _is2ndBubbleVisible = value;
+    notifyListeners();
+  }
+
+  bool _is3rdBubbleVisible = false;
+  bool get is3rdBubbleVisible => _is3rdBubbleVisible;
+
+  set is3rdBubbleVisible(bool value) {
+    _is3rdBubbleVisible = value;
+    notifyListeners();
+  }
 }
