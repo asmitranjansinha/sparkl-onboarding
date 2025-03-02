@@ -1,16 +1,13 @@
 # sprkl_onboarding
 
-A new Flutter project.
+## Screenshots 📸
 
-## Getting Started
+### iOS
 
-This project is a starting point for a Flutter application.
+|<img src="assets/screenshots/ios-ss-1.png" width="200">|<img src="assets/screenshots/ios-ss-2.png" width="200">|<img src="assets/screenshots/ios-ss-3.png" width="200">|
 
-A few resources to get you started if this is your first Flutter project:
+### Android
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+|<img src="assets/screenshots/android-ss-01.png" width="200">|<img src="assets/screenshots/android-ss-02.png" width="200">|<img src="assets/screenshots/android-ss-03.png" width="200">|
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
