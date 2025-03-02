@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'package:sprkl_onboarding/core/config/app_colors.dart';
 import 'package:sprkl_onboarding/core/utils/sizer.dart';
 import 'package:sprkl_onboarding/views/widgets/logo.dart';
 import 'package:sprkl_onboarding/views/widgets/stack_card.dart';
+import 'package:sprkl_onboarding/views/widgets/three_part_border_painter.dart';
 import 'package:video_player/video_player.dart';
 
 class OnboardingViewUpdated extends StatefulWidget {
@@ -77,7 +80,8 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
           ),
         ),
         bottomNavigationBar: SafeArea(
-          minimum: EdgeInsets.all(20.0),
+          minimum: EdgeInsets.symmetric(
+              horizontal: 20.0.sp(context), vertical: 30.0.sp(context)),
           child: Row(
             children: [
               onboardingController.onBoardingView == 1
@@ -85,24 +89,37 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                   : Padding(
                       padding: EdgeInsets.only(right: 20.sp(context)),
                       child: InkWell(
-                        onTap: () {
-                          if (onboardingController.onBoardingView == 2) {
-                            onboardingController.isGoingFromView2toView1 = true;
-                            onboardingController.isGoingFromView3toView2 =
-                                false;
-                            onboardingController.onBoardingView = 1;
-                          } else if (onboardingController.onBoardingView == 3) {
-                            onboardingController.isGoingFromView3toView2 = true;
-                            onboardingController.isGoingFromView2toView1 =
-                                false;
-                            onboardingController.onBoardingView = 2;
-                            onboardingController.is1stBubbleVisible = false;
-                            onboardingController.is2ndBubbleVisible = false;
-                            onboardingController.is3rdBubbleVisible = false;
-                          }
-                        },
-                        child: Icon(Icons.arrow_back),
-                      ),
+                          borderRadius: BorderRadius.circular(160),
+                          onTap: () {
+                            if (onboardingController.onBoardingView == 2) {
+                              onboardingController.isGoingFromView2toView1 =
+                                  true;
+                              onboardingController.isGoingFromView3toView2 =
+                                  false;
+                              onboardingController.onBoardingView = 1;
+                            } else if (onboardingController.onBoardingView ==
+                                3) {
+                              onboardingController.onBoardingView = 2;
+                              onboardingController.isGoingFromView3toView2 =
+                                  true;
+                              onboardingController.isGoingFromView2toView1 =
+                                  false;
+                              onboardingController.is1stBubbleVisible = false;
+                              onboardingController.is2ndBubbleVisible = false;
+                              onboardingController.is3rdBubbleVisible = false;
+                            }
+                          },
+                          child: DottedBorder(
+                            borderType: BorderType.Circle,
+                            color: AppColors.yellow,
+                            strokeWidth: 5,
+                            dashPattern: [40, 5],
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child:
+                                  Icon(Icons.arrow_back, color: Colors.black),
+                            ),
+                          )),
                     ),
               Expanded(
                 child: ElevatedButton(
@@ -110,12 +127,10 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                     if (onboardingController.onBoardingView == 1) {
                       onboardingController.onBoardingView = 2;
                     } else if (onboardingController.onBoardingView == 2) {
+                      onboardingController.isGoingFromView2toView1 = false;
                       onboardingController.onBoardingView = 3;
-                    } else if (onboardingController.onBoardingView == 3) {
-                      // Trigger the bubble animation after the video slides left
-                      Future.delayed(900.ms, () {
-                        onboardingController.is1stBubbleVisible = true;
-                      });
+                    } else {
+                      onboardingController.onBoardingView = 1;
                     }
                   },
                   child: Text("Next"),
@@ -248,10 +263,9 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
         Stack(
           clipBehavior: Clip.none,
           children: [
-            // BubbleSpecialThree placed before _teacherVideo
             Column(
               children: [
-                50.verticalSpace,
+                Platform.isAndroid ? 28.verticalSpace : 50.verticalSpace,
                 Align(
                   alignment: Alignment.topLeft,
                   child: AnimatedSwitcher(
@@ -294,7 +308,7 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
           children: [
             Column(
               children: [
-                50.verticalSpace,
+                Platform.isAndroid ? 28.verticalSpace : 50.verticalSpace,
                 Align(
                   alignment: Alignment.topRight,
                   child: AnimatedSwitcher(
@@ -334,7 +348,7 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
             children: [
               Column(
                 children: [
-                  20.verticalSpace,
+                  Platform.isAndroid ? 15.verticalSpace : 20.verticalSpace,
                   Align(
                     alignment: Alignment.topLeft,
                     child: AnimatedSwitcher(
@@ -463,13 +477,13 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                                   .animate()
                                   .slideY(
                                     begin: 0.0, // Start from top
-                                    end: 1.2, // Move to bottom
+                                    end: 1.5, // Move to bottom
                                     duration: 800.ms,
                                   )
                                   .scale(
                                     begin:
                                         Offset(1.0, 1.0), // Start at full size
-                                    end: Offset(0.4, 0.4), // Scale down
+                                    end: Offset(0.3, 0.3), // Scale down
                                     duration: 800.ms,
                                   )
                               : SizedBox.shrink(),
@@ -539,7 +553,7 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
               ),
 
               Positioned(
-                top: 17.h(context),
+                top: 15.h(context),
                 left: -5.w(context),
                 child: DottedBorder(
                   borderType: BorderType.Circle,
@@ -565,8 +579,8 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
               ),
               // Pre-read selected (top-left corner)
               Positioned(
-                top: 30.h(context),
-                left: -6.w(context),
+                bottom: -0.0.h(context),
+                left: -3.w(context),
                 child: DottedBorder(
                   borderType: BorderType.RRect,
                   radius: Radius.circular(60.sp(context)),
@@ -635,8 +649,8 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
               ),
               // Personalised (bottom-right corner)
               Positioned(
-                top: 25.h(context),
-                right: -10.w(context),
+                bottom: 5.h(context),
+                right: -4.w(context),
                 child: DottedBorder(
                   borderType: BorderType.RRect,
                   radius: Radius.circular(60.sp(context)),
@@ -670,7 +684,7 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
               ),
               // Emoji (bottom-right corner)
               Positioned(
-                top: 38.h(context),
+                bottom: -10.h(context),
                 right: -0.1.w(context),
                 child: DottedBorder(
                   borderType: BorderType.Circle,
@@ -771,8 +785,8 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                               child: VideoPlayer(_secondVideoController),
                             ).animate().slideY(
                                 begin: 0.0,
-                                end: -3.0,
-                                duration: 600.ms,
+                                end: -15.0,
+                                duration: 3.seconds,
                                 curve: Curves.easeOut,
                               )
                           : SizedBox.shrink(),
