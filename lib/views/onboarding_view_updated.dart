@@ -13,7 +13,7 @@ import 'package:sprkl_onboarding/core/config/app_colors.dart';
 import 'package:sprkl_onboarding/core/utils/sizer.dart';
 import 'package:sprkl_onboarding/views/widgets/logo.dart';
 import 'package:sprkl_onboarding/views/widgets/stack_card.dart';
-import 'package:sprkl_onboarding/views/widgets/three_part_border_painter.dart';
+import 'package:sprkl_onboarding/views/widgets/dashed_circle_painter.dart';
 import 'package:video_player/video_player.dart';
 
 class OnboardingViewUpdated extends StatefulWidget {
@@ -89,37 +89,40 @@ class _OnboardingViewUpdatedState extends State<OnboardingViewUpdated> {
                   : Padding(
                       padding: EdgeInsets.only(right: 20.sp(context)),
                       child: InkWell(
-                          borderRadius: BorderRadius.circular(160),
-                          onTap: () {
-                            if (onboardingController.onBoardingView == 2) {
-                              onboardingController.isGoingFromView2toView1 =
-                                  true;
-                              onboardingController.isGoingFromView3toView2 =
-                                  false;
-                              onboardingController.onBoardingView = 1;
-                            } else if (onboardingController.onBoardingView ==
-                                3) {
-                              onboardingController.onBoardingView = 2;
-                              onboardingController.isGoingFromView3toView2 =
-                                  true;
-                              onboardingController.isGoingFromView2toView1 =
-                                  false;
-                              onboardingController.is1stBubbleVisible = false;
-                              onboardingController.is2ndBubbleVisible = false;
-                              onboardingController.is3rdBubbleVisible = false;
-                            }
-                          },
-                          child: DottedBorder(
-                            borderType: BorderType.Circle,
-                            color: AppColors.yellow,
-                            strokeWidth: 5,
-                            dashPattern: [40, 5],
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child:
-                                  Icon(Icons.arrow_back, color: Colors.black),
+                        borderRadius: BorderRadius.circular(160),
+                        onTap: () {
+                          if (onboardingController.onBoardingView == 2) {
+                            onboardingController.isGoingFromView2toView1 = true;
+                            onboardingController.isGoingFromView3toView2 =
+                                false;
+                            onboardingController.onBoardingView = 1;
+                          } else if (onboardingController.onBoardingView == 3) {
+                            onboardingController.onBoardingView = 2;
+                            onboardingController.isGoingFromView3toView2 = true;
+                            onboardingController.isGoingFromView2toView1 =
+                                false;
+                            onboardingController.is1stBubbleVisible = false;
+                            onboardingController.is2ndBubbleVisible = false;
+                            onboardingController.is3rdBubbleVisible = false;
+                          }
+                        },
+                        child: CustomPaint(
+                          painter: DashedCirclePainter(
+                            dashColor: AppColors.yellow,
+                            dashGap: 8.0,
+                            dashWidth: 4.0,
+                            iconSize: 34.0,
+                            onBoardingView: onboardingController.onBoardingView,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.arrow_back,
+                              color: Colors.black,
                             ),
-                          )),
+                          ),
+                        ),
+                      ),
                     ),
               Expanded(
                 child: ElevatedButton(
